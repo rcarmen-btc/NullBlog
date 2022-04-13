@@ -1,0 +1,5 @@
+<div class="d-flex flex-column" style="background-color: white; padding: 25px; margin-top: 15px; margin-bottom: 15px;">
+    <p>{{ post.author }} {{ post.publish_date | timesince }}</p>
+        <h5><a href="{% url 'blog:post_single' post.slug %}">{{ post | truncatechars:100}}</a></h5>
+    <p>{{ post.content | truncatechars:450 }}</p>
+</div>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="d-flex flex-column" style="background-color: white; padding: 25px; margin-top: 10px; margin-bottom: 10px;">
+                <h1>{{ post }}</h1>
+                <p>{{ post.author }} {{ post.publish_date }}</p>
+                <p>{{ post.content }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
