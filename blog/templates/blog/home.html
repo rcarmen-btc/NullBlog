@@ -3,9 +3,21 @@
 {% block title %}Home page{% endblock %}
 
 {% block content %}
+
     <div class="container">
         <div class="d-flex justify-content-center">
             <div class="col-md-8">
+                <ul class="nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'blog:homepage' %}">All posts</a>
+                    </li>
+                  {% for category in categories %}
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                    </li>
+                  {% endfor %}
+
+                </ul>
                 {% for post in posts %}
                     {% include 'inc/card.html' %}
                 {% endfor %}
@@ -13,7 +25,4 @@
             </div>
         </div>
     </div>
-
-
-
 {% endblock %}

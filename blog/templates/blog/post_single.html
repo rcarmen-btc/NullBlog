@@ -7,9 +7,35 @@
     <div class="d-flex justify-content-center">
         <div class="col-md-8">
             <div class="d-flex flex-column" style="background-color: white; padding: 25px; margin-top: 10px; margin-bottom: 10px;">
-                <h1>{{ post }}</h1>
-                <p>{{ post.author }} {{ post.publish_date }}</p>
-                <p>{{ post.content }}</p>
+                <p><strong>{{ post.author }}</strong> {{ post.publish_date | timesince }} ago</p>
+                <h4>{{ post }}</h4>
+                <p>{{ post.content | safe }}</p>
+            </div>
+            <br>
+            <br>
+            <div class="d-flex flex-column" style="background-color: white; padding: 25px; margin-top: 10px; margin-bottom: 10px;">
+                {% with comments.count as total_comments %}
+                <h6>
+                    Comment{{ total_comments|pluralize }} <span style="color: darkviolet">{{ total_comments }}</span>
+                    <hr>
+                </h6>
+                {% endwith %}
+                {% for comment in comments %}
+                    <span>
+                        <strong>Comment {{ forloop.counter }} by {{ comment.name }}</strong> <i>on {{ comment.publish_date }}</i>
+                    </span>
+                        {{ comment.content|linebreaks }}
+                    {% empty %}
+                    <p>There are no comments for this post.</p>
+                {% endfor %}
+                <h2>Make a new comment</h2>
+
+                <form action="" id="myForm" method="post">
+                    {{ comments_form.as_p }}
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Primary</button>
+                </form>
+                
             </div>
         </div>
     </div>

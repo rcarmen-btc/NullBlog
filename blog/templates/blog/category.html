@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="d-flex justify-content-center">
+        <div class="col-md-8">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="{% url 'blog:homepage' %}">All posts</a>
+                </li>
+                {% for category in catlist.categories %}
+                    {% if catlist.current_category == category.slug %}
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                                </li>
+                    {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
+                                </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            {% with catlist.posts as posts %}
+                {% for post in posts %}
+                    {% include 'inc/card.html' %}
+                {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}
