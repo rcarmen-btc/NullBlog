@@ -1,9 +1,19 @@
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.contrib.auth.models import User
 
 
 class Category(models.Model):
+
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+class Tag(models.Model):
 
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
@@ -24,6 +34,7 @@ class Post(models.Model):
 
     title = models.CharField(max_length=250)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
+    tags = models.ManyToManyField(Tag)
     slug = models.SlugField(max_length=250, unique_for_date='publish_date')
     publish_date = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts', default=User)
@@ -31,6 +42,9 @@ class Post(models.Model):
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.DRAFT)
     objects = models.Manager()
     newmanager = NewManager()
+
+    def get_absolute_url(self):
+        return reverse('blog:post_single', args=[self.slug])
 
     class Meta:
         get_latest_by = ['publish_date']

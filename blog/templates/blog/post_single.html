@@ -7,8 +7,17 @@
     <div class="d-flex justify-content-center">
         <div class="col-md-8">
             <div class="d-flex flex-column" style="background-color: white; padding: 25px; margin-top: 10px; margin-bottom: 10px;">
-                <p><strong>{{ post.author }}</strong> {{ post.publish_date | timesince }} ago</p>
+                <p><strong>{{ post.author }}</strong> {{ post.publish_date | timesince }} ago • <a href="{% url 'blog:category' category.slug %}">{{ category }}</a> </p>
                 <h4>{{ post }}</h4>
+                <span style="text-size: 2;">
+                {% for tag in post.tags.all %}
+                    <span style="text-size: 2px; border: 0px solid black; background-color: lightgreen; border-radius: 30px; margin: 1px; padding: 5px;">
+                        <a href="{% url 'blog:tag' tag.slug %}">{{ tag }}</a>
+                    </span>
+                {% endfor %}
+                </span>
+                <br>
+
                 <p>{{ post.content | safe }}</p>
             </div>
             <br>
@@ -22,7 +31,7 @@
                 {% endwith %}
                 {% for comment in comments %}
                     <span>
-                        <strong>Comment {{ forloop.counter }} by {{ comment.name }}</strong> <i>on {{ comment.publish_date }}</i>
+                        <strong>Comment {{ forloop.counter }} by {{ comment.name }}</strong> <i> {{ comment.publish_date | timesince }} ago</i>
                     </span>
                         {{ comment.content|linebreaks }}
                     {% empty %}
@@ -40,7 +49,4 @@
         </div>
     </div>
 </div>
-
-
-
 {% endblock %}
