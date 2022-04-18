@@ -5,7 +5,6 @@
 {% block content %}
 
 <div class="container">
-
     <div class="d-flex justify-content-center">
         <div class="col-md-8">
             <ul class="nav nav-tabs  sticky-top" style="background-color: #F0F0F0">
@@ -13,7 +12,7 @@
                     <a class="nav-link" aria-current="page" href="{% url 'blog:homepage' %}">All posts</a>
                 </li>
                 {% for category in categories %}
-                {% if catlist.current_category == category.slug %}
+                {% if taglist.current_category == category.slug %}
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'blog:category' category.slug %}">{{ category }}</a>
                 </li>
@@ -35,12 +34,6 @@
             {% endif %}
         </div>
         <div class="d-flex justify-content-end" style="padding: 100px;">
-            {% for tag in tags %}
-            <span style="text-size: 2px; height: 40px; border: 0px solid black; background-color: lightgreen; border-radius: 30px; margin: 1px; padding: 5px;">
-                        <a href="{% url 'blog:tag' tag.slug %}">{{ tag }}</a>
-                    </span>
-            {% endfor %}
-        </div>
     </div>
 </div>
 </div>

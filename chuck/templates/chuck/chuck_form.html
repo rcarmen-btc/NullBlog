@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+  <form method="post">
+      {% csrf_token %}
+      <label for="guess">Guess:</label>
+      <input type="text" id="guess" name="guess"/>
+      <button type="submit">Submit</button>
+      {% if msg %}
+      <p>ur guess: {{ msg }}</p>
+      {% endif %}
+  </form>
+</body>
+</html>

@@ -15,36 +15,66 @@ def home(request):
         'categories': models.Category.objects.all(),
         'tags': models.Tag.objects.all()
     }
+    print(context['posts'])
     return render(request, 'blog/home.html', context)
-    # return render(request, 'blog/home.html')
 
 
-def post_single(request, post_slug):
+class PostDetailView(DetailView):
 
-    post = get_object_or_404(models.Post, slug=post_slug, status=models.Post.Status.PUBLISHED)
+    model = models.Post
+    template_name = 'blog/post_detail_view.html'
+    context_object_name = 'post'
+    slug_field = 'slug'
+    slug_url_kwarg = 'post_slug'
 
-    comments = post.comments.filter(status=True)
+    def get_queryset(self):
+        return models.Post.objects.filter(slug=self.kwargs['post_slug'])
 
-    user_comment = None
+    def get_context_data(self, **kwargs):
+        post = get_object_or_404(models.Post, slug=self.kwargs['post_slug'], status=models.Post.Status.PUBLISHED)
+        context = super().get_context_data(**kwargs)
+        context['comments'] = post.comments.filter(status=True)
+        context['comments_form'] = forms.NewComment()
+        return context
 
-    if request.method == 'POST':
+    def post(self, request, **kwargs):
+        post = get_object_or_404(models.Post, slug=self.kwargs['post_slug'], status=models.Post.Status.PUBLISHED)
+        comments = post.comments.filter(status=True)
+        user_comment = None
         comment_form = forms.NewComment(request.POST)
         if comment_form.is_valid():
             user_comment = comment_form.save(commit=False)
             user_comment.post = post
             user_comment.save()
-            return HttpResponseRedirect('/' + post_slug)
-    else:
-        comment_form = forms.NewComment()
+            return HttpResponseRedirect('/' + kwargs['post_slug'])
 
-    context = {
-        'post': post,
-        # 'comments': user_comment,
-        'comments': comments,
-        'category': post.category,
-        'comments_form': comment_form,
-    }
-    return render(request, 'blog/post_single.html', context)
+
+# def post_single(request, post_slug):
+#
+#     post = get_object_or_404(models.Post, slug=post_slug, status=models.Post.Status.PUBLISHED)
+#
+#     comments = post.comments.filter(status=True)
+#
+#     user_comment = None
+#
+#     if request.method == 'POST':
+#         comment_form = forms.NewComment(request.POST)
+#         if comment_form.is_valid():
+#             user_comment = comment_form.save(commit=False)
+#             user_comment.post = post
+#             user_comment.save()
+#             return HttpResponseRedirect('/' + post_slug)
+#     else:
+#         comment_form = forms.NewComment()
+#
+#     context = {
+#         'post': post,
+#         # 'comments': user_comment,
+#         'comments': comments,
+#         'category': post.category,
+#         'comments_form': comment_form,
+#     }
+#     return render(request, 'blog/post_single.html', context)
 
 
 class CategoryListView(ListView):
@@ -61,6 +91,10 @@ class CategoryListView(ListView):
         }
         return content
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tags'] = models.Tag.objects.all()
+        return context
 
 class TagListView(ListView):
 
