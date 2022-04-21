@@ -3,6 +3,6 @@
         <h5><a href="{{ post.get_absolute_url }}">{{ post | truncatechars:100}}</a></h5>
     <p>{{ post.content | truncatechars:450 }}</p>
     <a href="{% url 'blog:post_single' post.slug %}">
-    <button type="button" class="btn btn-outline-success col-sm-2">Read more..</button>
+    <button type="button" class="btn btn-outline-success col-sm-3">Read more..</button>
     </a>
 </div>

@@ -15,7 +15,7 @@ def home(request):
         'categories': models.Category.objects.all(),
         'tags': models.Tag.objects.all()
     }
-    print(context['posts'])
+    # print(context['posts'])
     return render(request, 'blog/home.html', context)
 
 
@@ -46,7 +46,7 @@ class PostDetailView(DetailView):
             user_comment = comment_form.save(commit=False)
             user_comment.post = post
             user_comment.save()
-            return HttpResponseRedirect('/' + kwargs['post_slug'])
+        return HttpResponseRedirect('/' + kwargs['post_slug'])
 
 
 # def post_single(request, post_slug):

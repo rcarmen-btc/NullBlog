@@ -4,6 +4,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
+def user_directory_path(instance, filename):
+    # return f'photos/{instance.id}/{filename}'
+    return f'photos/%Y/%m/%d'
+
+
 class Category(models.Model):
 
     name = models.CharField(max_length=100)
@@ -33,6 +38,7 @@ class Post(models.Model):
         PUBLISHED = 'published'
 
     title = models.CharField(max_length=250)
+    photo = models.ImageField(upload_to=user_directory_path, default='photos/default.png')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, default=1)
     tags = models.ManyToManyField(Tag)
     slug = models.SlugField(max_length=250, unique_for_date='publish_date')
